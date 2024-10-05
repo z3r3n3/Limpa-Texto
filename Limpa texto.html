@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processador de Texto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .output {
+            margin-top: 20px;
+        }
+        .part-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #e9e9e9;
+            border: 1px solid #ddd;
+        }
+        .part {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .copy-btn {
+            padding: 5px 10px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Processador de Texto</h1>
+        <p>Insira o texto que deseja processar:</p>
+        
+        <textarea id="inputText" placeholder="Digite seu texto aqui..."></textarea>
+        <button onclick="processText()">Processar Texto</button>
+        
+        <div id="output" class="output"></div>
+    </div>
+
+    <script>
+        function cleanText(text) {
+            // Remove os tempos (formato 00:04) e números entre parênteses, colchetes e chaves
+            return text
+                .replace(/\b\d{1,2}:\d{2}\b/g, '') // Remove tempos como 00:04
+                .replace(/[\(\[\{][^\)\]\}]*[\)\]\}]/g, '') // Remove conteúdo entre parênteses, colchetes e chaves
+                .replace(/\s+/g, ' ') // Remove espaços extras
+                .trim(); // Remove espaços no início e no final
+        }
+
+        function processText() {
+            let text = document.getElementById('inputText').value;
+
+            // Limpa o texto antes de processar
+            text = cleanText(text);
+
+            // Validações básicas
+            if (!text) {
+                alert('Por favor, insira um texto.');
+                return;
+            }
+
+            // Exibir o texto processado
+            let outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // Limpa a saída
+
+            let partId = `processed_text`;
+
+            outputDiv.innerHTML += `<div class="part-container">
+                <div class="part">
+                    <p><strong>Texto Processado:</strong></p>
+                    <p id="${partId}">${text}</p>
+                    <button class="copy-btn" onclick="copyToClipboard('${partId}')">Copiar Texto</button>
+                </div>
+            </div>`;
+        }
+
+        function copyToClipboard(elementId) {
+            let text = document.getElementById(elementId).textContent;
+            let tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Texto copiado para a área de transferência!');
+        }
+    </script>
+</body>
+</html>
