@@ -72,7 +72,16 @@
         function processText() {
             let text = document.getElementById('inputText').value;
 
-            // Limpa o texto antes de processar
+            // Verifica se o termo "Transcript:" está presente e começa o texto a partir dele
+            let busca = "Transcript:";
+            let indice = text.indexOf(busca);
+
+            if (indice !== -1) {
+                // Extrai o texto a partir do termo "Transcript:"
+                text = text.substring(indice + busca.length);
+            }
+
+            // Limpa o texto após o corte
             text = cleanText(text);
 
             // Validações básicas
@@ -104,7 +113,7 @@
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-           
+            alert('Texto copiado para a área de transferência!');
         }
     </script>
 </body>
